@@ -1,0 +1,53 @@
+
+
+<html>
+	<head>	
+	</head>
+	<body>
+		<div id="log">
+			<p>Bla</p>
+		</div>
+		<script type="text/javascript">	
+			var map = [
+				[1, 2, 3, 4, 8, 9, 12],                
+				[7, 9, 10, 22, 48, 59, 62],                
+				[26, 37, 52, 111, 219, 711, 1112]               
+			];
+				
+			var trueMap = [];
+			for(var i = 0; i < map.length; i ++) {
+				trueMap.push(map[i]);
+			}
+			var result = [];
+			function recurs(array) {
+				if(array.length == 1) {
+					return array;
+				}
+				else {
+					var left = recurs(array.slice(0, Math.floor(array.length %2));
+					var right = recurs(array.slice(Math.floor(array.length %2 + 1 )));
+					
+				}
+			}
+
+			while(result.length < totalLength) {
+				var min = undefined;
+				var ele = undefined;
+				for(var i = 0; i < map.length;  i++) {
+					if(pos[i] < map[i].length && (min == undefined || map[i][pos[i]] < min)) {
+						min = map[i][pos[i]];
+						ele = i;
+					}        
+				}
+				if(ele !== undefined) {
+					pos[ele] += 1;
+				}
+				result.push(min);
+			}
+				
+			var div = document.getElementById("log");
+			div.innerHTML = result.join();
+
+		</script>
+	</body>
+</html>

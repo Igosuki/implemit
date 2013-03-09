@@ -1,0 +1,37 @@
+<html>
+	<head>	
+	</head>
+	<body>
+		<div id="log">
+			<p>Bla</p>
+		</div>
+		<script type="text/javascript">	
+			var cache = {
+				1: 1,
+				2: 3,
+				3: 4
+			};
+
+			var recurseCount = function (steps) {
+					count =  0;
+				if(steps < 1) {
+					return 0;
+				}
+				if(cache[steps]) {
+					return cache[steps];
+				}
+				for(var i in cache) {
+					count += cache[steps-i] || recurseCount(steps - i);
+				}
+				return count;
+			};
+
+			var div = document.getElementById("log");
+			var start = new Date().getTime();
+			div.innerHTML = recurseCount(20);
+			var end = new Date().getTime();
+			var time = end - start;
+			alert(time);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,48 @@
+
+
+<html>
+	<head>	
+	</head>
+	<body>
+		<div id="log">
+			<p>Bla</p>
+		</div>
+		<script type="text/javascript">	
+			var map = {
+				a: ['A', '@', '4'],
+				e: ['E', '€']
+			};
+			var string = "gales";
+			//Instead of recurs, could be done with foreach(c in word) foreach(char in map[c]) foreach(previousIterationStrings) prevString + char
+			var recurs = function(word) {				
+					var retval = []
+					if(word.length == 1) {
+						retval.push(map[word[0]] || [word[0]]);
+					}
+					else {
+						var curr = map[word[0]];
+						var recursed = recurs(word.slice(1));
+						for(j in recursed) {
+							if(curr) {
+								for(var i = 0; i < map[word[0]].length; i++) {
+									retval.push(map[word[0]][i] + recursed[j]);
+								}
+							} else {
+								retval.push(word[0] + recursed[j]);	
+							}
+						}
+					} 
+					return retval;
+			};
+			
+						var log = document.getElementById("log");
+						var result = recurs(string);
+						if(result !== undefined) {
+							log.innerHTML = result.join(); 
+						}
+						var arz = ["a"];
+						arz.push([string[0]]);
+						//log.innerHTML = arz
+		</script>
+	</body>
+</html>
