@@ -76,6 +76,7 @@ func (v *VanEmdeBoasTree) Delete(k float64) {
 	if v.Max == k && v.Min == k {
 		v.Max = -2
 		v.Min = -1
+		k = -1
 	}
 	if v.u == 2 {
 		if k == 0 {
@@ -121,12 +122,36 @@ func (v *VanEmdeBoasTree) Lookup(k float64) bool {
 	}
 }
 
-func (*VanEmdeBoasTree) FindNext(k float64) {
-	panic("implement me")
+func (v *VanEmdeBoasTree) FindNext(k float64) float64 {
+	if k <= v.Min {
+		return v.Min
+	}
+	if k > v.Max {
+		return v.u
+	}
+	nextIdx := v.high(k)
+	rest := v.low(k)
+	quot := k - rest
+	if rest <= v.children[nextIdx].Max {
+		return quot + v.children[nextIdx].FindNext(rest)
+	}
+	return quot + v.children[int(v.summary.FindNext(float64(nextIdx)))].Min
 }
 
-func (*VanEmdeBoasTree) FindPrevious(k float64) {
-	panic("implement me")
+func (v *VanEmdeBoasTree) FindPrevious(k float64) float64 {
+	if k >= v.Max {
+		return v.Max
+	}
+	if k < v.Min {
+		return -2
+	}
+	nextIdx := v.high(k)
+	rest := v.low(k)
+	quot := k - rest
+	if rest >= v.children[nextIdx].Min {
+		return quot + v.children[nextIdx].FindNext(rest)
+	}
+	return quot - v.children[int(v.summary.FindPrevious(nextIdx))].Max
 }
 
 func NewVanEmdeBoasTree(maxKeyLength float64) *VanEmdeBoasTree {
