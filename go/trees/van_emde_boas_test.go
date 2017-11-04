@@ -53,18 +53,40 @@ func TestVanEmdeBoasTree_Delete(t *testing.T) {
 	type args struct {
 		k float64
 	}
-	tests := []struct {
+	type testArgs struct {
 		name string
-		v    *VanEmdeBoasTree
 		args args
-	}{
-	// TODO: Add test cases.
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			v := NewVanEmdeBoasTree(8)
-			v.Delete(tt.args.k)
-		})
+	tests := make([]testArgs, 0, 0)
+	var u int64 = int64(math.Pow(2, 10))
+	var maxVal float64
+	for i := int64(1); i < u; i++ {
+		theRand := float64(rand.Int63n(u))
+		if theRand > maxVal {
+			maxVal = theRand
+		}
+		tests = append(tests, testArgs{name: "thetest" + strconv.Itoa(int(i)), args: args{theRand}})
+	}
+	defer timeTrack(time.Now(), "hugetree")
+	log2 := math.Log2(float64(u))
+	fmt.Printf("log %v\n", math.Ceil(log2))
+	v := NewVanEmdeBoasTree(math.Ceil(log2))
+	t.Run("test", func(t *testing.T) {
+		for _, tt := range tests {
+			v.Insert(tt.args.k)
+		}
+		randomKey := tests[rand.Int31n(int32(len(tests)))].args.k
+		if !v.Lookup(randomKey) {
+			t.Fatal("Random key from the original set was not present")
+		}
+		v.Delete(randomKey)
+		if v.Lookup(randomKey) {
+			t.Fatal("Random key was not deleted")
+		}
+	})
+	fmt.Println(v.Min, v.Max)
+	if v.Max != maxVal {
+		t.Fatal(maxVal, v.Max)
 	}
 }
 

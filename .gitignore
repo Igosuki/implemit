@@ -170,3 +170,5 @@ compiled
 .idea
 *.iml
 .exe
+
+out

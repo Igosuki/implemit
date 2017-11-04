@@ -60,7 +60,7 @@ func (v *VanEmdeBoasTree) Insert(k float64) {
 		if v.children[nextIdx] == nil {
 			v.children[nextIdx] = recursiveTreeInit(v.u)
 			v.children[nextIdx].Insert(rest)
-			v.summary.Insert(rest)
+			v.summary.Insert(float64(nextIdx))
 		} else {
 			v.children[nextIdx].Insert(rest)
 		}
@@ -72,8 +72,39 @@ func (v *VanEmdeBoasTree) Insert(k float64) {
 
 }
 
-func (*VanEmdeBoasTree) Delete(k float64) {
-	panic("implement me")
+func (v *VanEmdeBoasTree) Delete(k float64) {
+	if v.Max == k && v.Min == k {
+		v.Max = -2
+		v.Min = -1
+	}
+	if v.u == 2 {
+		if k == 0 {
+			v.Min = 1
+		} else {
+			v.Min = 0
+		}
+		v.Max = v.Min
+		return
+	}
+	if k == v.Min {
+		k = v.children[int(v.summary.Min)].Min
+		v.Min = k
+	}
+	nextIdx := v.high(k)
+	v.children[nextIdx].Delete(v.low(k))
+	if v.children[nextIdx].isEmpty() {
+		v.summary.Delete(float64(nextIdx))
+	}
+	if k == v.Max {
+		if v.summary.isEmpty() {
+			v.Max = v.Min
+		} else {
+			v.Max = v.children[int(v.summary.Max)].Max
+		}
+	}
+}
+func (v *VanEmdeBoasTree) isEmpty() bool {
+	return v.Max == -2 && v.Min == -1
 }
 
 func (v *VanEmdeBoasTree) Lookup(k float64) bool {
