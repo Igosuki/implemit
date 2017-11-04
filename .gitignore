@@ -166,3 +166,7 @@ pip-log.txt
 compiled
 *.jar
 
+# Idea
+.idea
+*.iml
+.exe
